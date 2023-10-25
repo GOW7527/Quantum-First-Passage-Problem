@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.linalg import eigh_tridiagonal
 from scipy.linalg import ishermitian
+import multiprocessing as mp
 
 def is_tridiagonal(model):
     n=len(model.array)
@@ -23,11 +24,11 @@ class return_problem:
         self.array=hamiltonian
         self.psi_0=psi_0
         self.tau=tau
-        self.N=N
+        self.N=int(N)
         self.tridiagonal=is_tridiagonal(self)
 
         if self.tridiagonal:                                #If the Hamiltonian is tridiagonal, we can use the faster exact diagonalization procedure
-            D=self.array.diagonal
+            D=self.array.diagonal()
             off_D=self.array.diagonal(1)
             self.E,self.V=eigh_tridiagonal(D,off_D)
         else:
@@ -48,10 +49,10 @@ class arrival_problem:
         self.psi_0=psi_0
         self.psi_T=psi_T
         self.tau=tau
-        self.N=N
+        self.N=int(N)
         self.tridiagonal=is_tridiagonal(self)
         if self.tridiagonal:                                #If the Hamiltonian is tridiagonal, we can use the faster exact diagonalization procedure
-            D=self.array.diagonal
+            D=self.array.diagonal()
             off_D=self.array.diagonal(1)
             self.E,self.V=eigh_tridiagonal(D,off_D)
         else:
@@ -71,6 +72,7 @@ class multiple_return_problems:
         self.name='multiple_return_problems'
         self.n=len(H_list)
         self.models=[None]*self.n
+        self.N=int(N)
         for i in range(self.n):
             self.models[i]=return_problem(H_list[i],psi_0,tau,N)
 
