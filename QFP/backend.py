@@ -40,6 +40,7 @@ def first_detection_amplitude_calculator(amplitudes):
             inverse=amplitudes[:,:i][:,::-1]
             phi[:,i]=amplitudes[:,i]-np.sum(phi[:,:i]*inverse,axis=1)
         return phi
+    
 
 
 

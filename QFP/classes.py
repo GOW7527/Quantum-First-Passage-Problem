@@ -62,7 +62,7 @@ class multiple_return_problems:
     '''
     This is suited for the case we study disordered systems and need to perform an average over many realizations of the disorder. Or interested in comparing multiple Hamiltonians at the same time
     '''
-    def __init__(self,H_list,psi_0,tau=None,N=1e4):
+    def __init__(self,H_list,psi_0,tau=None,N=1e4,parallel=False):
         '''
         H_list: list of Hamiltonians
         psi_0: initial state
@@ -71,10 +71,14 @@ class multiple_return_problems:
         '''
         self.name='multiple_return_problems'
         self.n=len(H_list)
-        self.models=[None]*self.n
         self.N=int(N)
-        for i in range(self.n):
-            self.models[i]=return_problem(H_list[i],psi_0,tau,N)
+        if parallel:
+            with mp.Pool() as pool:
+                self.models=pool.starmap(return_problem,[(H_list[i],psi_0,tau,N) for i in range(self.n)])
+        else:
+            self.models=[None]*self.n
+            for i in range(self.n):
+                self.models[i]=return_problem(H_list[i],psi_0,tau,N)
 
 class multiple_arrival_problems:
     '''

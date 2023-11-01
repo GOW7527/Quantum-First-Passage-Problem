@@ -7,11 +7,9 @@ def probability_amplitude(model):
     elif model.name=='arrival_problem':
         return arrival_amplitude(model)
     elif "multiple" in model.name:
-        Amplitudes=np.zeros((model.n,model.N),dtype=np.complex_)
         with mp.Pool() as pool:
             results=pool.map(probability_amplitude,model.models)
-        for i,result in enumerate(results):
-            Amplitudes[i]=result
+        Amplitudes=np.array(results,dtype=np.complex_)
         return Amplitudes
     else:
         raise ValueError("Model is not well defined")
