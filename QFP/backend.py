@@ -1,4 +1,5 @@
 import numpy as np
+import multiprocessing as mp
 
 #Return Problem
 def return_amplitude(model):
@@ -20,7 +21,7 @@ def arrival_amplitude(model):
     '''
     pass
 
-def first_detection_amplitude_calculator(amplitudes):
+def first_detection_amplitude_calculator(amplitudes,parallel=True):
     '''
     This function calculates the first detection amplitude, phi_n, either from multiple sets of amplitudes or just a single one.
     '''
@@ -32,7 +33,7 @@ def first_detection_amplitude_calculator(amplitudes):
             inverse=amplitudes[:i][::-1]
             phi[i]=amplitudes[i]-np.sum(phi[:i]*inverse)
         return phi
-    elif amplitudes.ndim==2:
+    elif amplitudes.ndim==2 and parallel==False:
         n=amplitudes.shape[1]
         phi=np.zeros_like(amplitudes,dtype=np.complex_)
         phi[:,0]=amplitudes[:,0]
@@ -40,6 +41,10 @@ def first_detection_amplitude_calculator(amplitudes):
             inverse=amplitudes[:,:i][:,::-1]
             phi[:,i]=amplitudes[:,i]-np.sum(phi[:,:i]*inverse,axis=1)
         return phi
+    elif amplitudes.ndim==2 and parallel==True:
+        with mp.pool as pool:
+            results=pool.starmap(first_detection_amplitude_calculator,[amplitudes[i] for i in range(amplitudes.shape[0])])
+        return np.array(results,dtype=np.complex_)
     
 
 
