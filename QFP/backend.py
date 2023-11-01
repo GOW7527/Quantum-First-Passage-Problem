@@ -25,7 +25,7 @@ def first_detection_amplitude_calculator(amplitudes,parallel=True):
     '''
     This function calculates the first detection amplitude, phi_n, either from multiple sets of amplitudes or just a single one.
     '''
-    if amplitudes.ndim==1:
+    if amplitudes.ndim==1 and parallel==False:
         n=amplitudes.shape[0]
         phi=np.zeros_like(amplitudes,dtype=np.complex_)
         phi[0]=amplitudes[0]
@@ -42,8 +42,8 @@ def first_detection_amplitude_calculator(amplitudes,parallel=True):
             phi[:,i]=amplitudes[:,i]-np.sum(phi[:,:i]*inverse,axis=1)
         return phi
     elif amplitudes.ndim==2 and parallel==True:
-        with mp.pool as pool:
-            results=pool.starmap(first_detection_amplitude_calculator,[amplitudes[i] for i in range(amplitudes.shape[0])])
+        with mp.Pool() as pool:
+            results=pool.starmap(first_detection_amplitude_calculator,[(amplitudes[i],False,) for i in range(amplitudes.shape[0])])
         return np.array(results,dtype=np.complex_)
     
 
