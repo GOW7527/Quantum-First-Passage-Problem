@@ -21,13 +21,13 @@ def arrival_amplitude(model):
     '''
     pass
 
-def first_detection_amplitude_calculator(amplitudes,parallel=True):
+def first_detection_amplitude_calculator(amplitudes,parallel=False):
     '''
     This function calculates the first detection amplitude, phi_n, either from multiple sets of amplitudes or just a single one.
     '''
     if amplitudes.ndim==1 and parallel==False:
         n=amplitudes.shape[0]
-        phi=np.zeros_like(amplitudes,dtype=np.complex_)
+        phi=np.zeros(n,dtype=np.complex_)
         phi[0]=amplitudes[0]
         for i in range(1,n):
             inverse=amplitudes[:i][::-1]
@@ -35,7 +35,7 @@ def first_detection_amplitude_calculator(amplitudes,parallel=True):
         return phi
     elif amplitudes.ndim==2 and parallel==False:
         n=amplitudes.shape[1]
-        phi=np.zeros_like(amplitudes,dtype=np.complex_)
+        phi=np.zeros(n,dtype=np.complex_)
         phi[:,0]=amplitudes[:,0]
         for i in range(1,n):
             inverse=amplitudes[:,:i][:,::-1]

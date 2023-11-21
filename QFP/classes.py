@@ -30,7 +30,10 @@ class return_problem:
         if self.tridiagonal:                                #If the Hamiltonian is tridiagonal, we can use the faster exact diagonalization procedure
             D=self.array.diagonal()
             off_D=self.array.diagonal(1)
-            self.E,self.V=eigh_tridiagonal(D,off_D)
+            if np.sum(D**2)==0:
+                self.E,self.V=np.linalg.eigh(self.array)
+            else:
+                self.E,self.V=eigh_tridiagonal(D,off_D)
         else:
             self.E,self.V=np.linalg.eigh(self.array)
 

@@ -1,5 +1,6 @@
 from QFP.backend import *
 import multiprocessing as mp
+import numpy as np
 
 def probability_amplitude(model):
     if model.name=='return_problem':
