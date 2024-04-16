@@ -94,7 +94,7 @@ class multiple_return_problems:
                     return_problem, [(H_list[i], psi_0, tau, N) for i in range(self.n)]
                 )
         else:
-            self.models = [None] * self.n
+            self.models = [] * self.n
             for i in range(self.n):
                 self.models[i] = return_problem(H_list[i], psi_0, tau, N)
 
@@ -114,6 +114,6 @@ class multiple_arrival_problems:
         """
         self.name = "multiple_arrival_problems"
         self.n = len(H_list)
-        self.models = [None] * self.n
+        self.models = [] * self.n
         for i in range(self.n):
             self.models[i] = arrival_problem(H_list[i], psi_0, psi_T, tau, N)

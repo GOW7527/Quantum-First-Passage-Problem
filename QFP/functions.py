@@ -44,4 +44,5 @@ def first_detection_probability(model=None, amplitudes=None):
     if model is not None and amplitudes is not None:
         raise ValueError("Only model or loschmidt_amplitude must be given")
     phi = first_detection_amplitude(model=model, amplitudes=amplitudes)
+    assert phi is not None
     return np.abs(phi) ** 2
